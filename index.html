@@ -200,7 +200,7 @@
                     <p>2026/02/12 Happy Birthday! 🇰🇷</p>
                 </div>
                 <div class="top-actions">
-                    <a href="https://m.map.naver.com/search2/search.naver?query=%ED%99%94%EC%9E%A5%EC%8B%A4" target="_blank" class="header-btn toilet-btn">🚽 廁所</a>
+                    <a href="nmap://search?query=%ED%99%94%EC%9E%A5%EC%8B%A4&appname=seoul_trip" target="_blank" class="header-btn toilet-btn">🚽 廁所</a>
                     <button class="header-btn family-btn" onclick="openLocModal()">📍 家人</button>
                     <a href="https://map.konest.com/psubway" target="_blank" class="header-btn metro-btn">🚇 地鐵</a>
                 </div>
@@ -441,7 +441,7 @@
                     <div class="btn-row">
                         ${e.kr ? `<button class="action-btn driver-btn" onclick="showKR('${e.kr}')"><span class="btn-icon-lg">🔍</span> 給司機</button>` : ""}
                         
-                        ${e.map ? `<a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(e.map)}" target="_blank" class="action-btn map-btn"><span class="btn-icon-lg">🗺️</span> Naver 地圖</a>` : ""}
+                        ${e.map ? `<a href="nmap://search?query=${encodeURIComponent(e.map)}&appname=seoul_trip" target="_blank" class="action-btn map-btn"><span class="btn-icon-lg">📲</span> 啟動 Naver App</a>` : ""}
                         
                         ${e.video ? `<a href="https://www.youtube.com/watch?v=${e.video}" target="_blank" class="action-btn video-btn"><span class="btn-icon-lg">▶️</span> 影片</a>` : ""}
                         
@@ -562,6 +562,9 @@
             u.lang = 'ko-KR';
             window.speechSynthesis.speak(u);
         }
+        function findRestroom() {
+            window.open("nmap://search?query=%ED%99%94%EC%9E%A5%EC%8B%A4&appname=seoul_trip", "_blank");
+        }
         function openLocModal() {
             document.getElementById('loc-modal').style.display = 'flex';
         }
@@ -600,6 +603,7 @@
             fetch('https://api.open-meteo.com/v1/forecast?latitude=37.56&longitude=126.97&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul')
             .then(r=>r.json()).then(d=>{
                 document.getElementById('w-temp').innerText = Math.round(d.current_weather.temperature) + "°C";
+                // 移除穿著建議顯示
             });
         }
 
