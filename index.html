@@ -153,13 +153,14 @@
         .btn-speak { background: #e0e7ff; color: #4338ca; }
         .section-title { font-size: 15px; font-weight: bold; color: #4b5563; margin: 20px 0 10px 5px; }
 
-        /* 預算 (v91升級) */
+        /* 預算 (v92升級：台幣顯示) */
         .budget-summary { background:white; padding:15px; border-radius:16px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
-        .summary-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
-        .summary-row span { font-size:14px; color:#666; font-weight:bold; }
+        .summary-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+        .summary-label { font-size:14px; color:#666; font-weight:bold; }
         .summary-input { width:120px; text-align:right; padding:5px; border:1px solid #ddd; border-radius:6px; font-weight:bold; font-size:16px; color:#333; }
         .highlight-red { color: #dc2626; font-weight: bold; font-size: 16px; }
         .highlight-green { color: #059669; font-weight: 800; font-size: 20px; }
+        .ntd-small { display:block; font-size:12px; color:#999; font-weight:normal; text-align:right; margin-top:-2px; }
         
         .budget-form { background: white; border-radius: 16px; padding: 15px; margin-bottom: 20px; }
         .form-row { display: flex; gap: 10px; margin-bottom: 10px; width: 100%; }
@@ -267,7 +268,7 @@
     <div id="toast">已複製到剪貼簿！</div>
 
     <script>
-        // --- 1. 資料庫 (完整行程 v91) ---
+        // --- 1. 資料庫 (完整行程 v92) ---
         // 交通代碼：type 1=Taxi(Orange), 2=Metro(Green), 3=Walk(Blue), 4=Bus(Yellow)
         var tripData = [
             { day: "Day 1 (三)", date: "02/11", events: [
@@ -554,6 +555,8 @@
             
             var listHtml = ex.map((x, i) => {
                 var cat = categories.find(c=>c.id === (x.cat || 'other')) || categories[4];
+                // 計算單筆台幣
+                var ntdAmt = Math.round(x.amt * 0.024);
                 return `<div class="expense-item">
                     <div style="display:flex; align-items:center;">
                         <span class="ex-cat-icon">${cat.icon}</span>
@@ -561,27 +564,39 @@
                     </div>
                     <div style="text-align:right">
                         <div style="color:#be185d; font-weight:bold;">₩${x.amt.toLocaleString()}</div>
+                        <div class="ntd-small">(≈ NT$${ntdAmt.toLocaleString()})</div>
                         <div onclick="delEx(${i})" style="color:#999; font-size:12px; margin-top:5px; cursor:pointer;">刪除</div>
                     </div>
                 </div>`;
             }).join('');
 
+            // 計算總覽台幣
+            var ntdTotalCash = Math.round(totalCash * 0.024);
+            var ntdTotalEx = Math.round(totalEx * 0.024);
+            var ntdBalance = Math.round(balance * 0.024);
+
             // 2. 渲染介面 (含現金設定區)
             document.getElementById("budget-view").innerHTML = `
                 <div class="budget-summary">
                     <div class="summary-row">
-                        <span>💵 手頭韓幣現金 (Initial Cash)</span>
+                        <span class="summary-label">💵 手頭韓幣現金 (Initial Cash)</span>
                         <input type="number" id="total_cash_input" value="${totalCash}" onchange="saveTotalCash()" class="summary-input" placeholder="0">
                     </div>
+                    <div style="text-align:right; font-size:12px; color:#666; margin-bottom:10px;">(約合 NT$${ntdTotalCash.toLocaleString()})</div>
+
                     <div class="summary-row">
-                        <span>💸 目前總支出 (Total Spent)</span>
+                        <span class="summary-label">💸 目前總支出 (Total Spent)</span>
                         <span class="highlight-red">- ₩${totalEx.toLocaleString()}</span>
                     </div>
+                    <div style="text-align:right; font-size:12px; color:#666; margin-bottom:5px;">(約合 NT$${ntdTotalEx.toLocaleString()})</div>
+
                     <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+                    
                     <div class="summary-row">
                         <span style="font-size:16px; color:#333;">💰 剩餘現金 (Remaining)</span>
                         <span class="highlight-green" style="color:${balance >= 0 ? '#059669' : '#dc2626'}">₩${balance.toLocaleString()}</span>
                     </div>
+                    <div style="text-align:right; font-size:13px; color:#666; font-weight:bold;">(約合 NT$${ntdBalance.toLocaleString()})</div>
                 </div>
 
                 <div class="budget-form">
@@ -590,7 +605,7 @@
                     </div>
                     <div class="form-row">
                         <input type="text" id="ex_desc" class="form-input input-desc" placeholder="項目 (如: 烤肉)">
-                        <input type="number" id="ex_amt" class="form-input input-amt" placeholder="金額">
+                        <input type="number" id="ex_amt" class="form-input input-amt" placeholder="金額 (韓幣)">
                     </div>
                     <button class="add-expense-btn" onclick="addEx()">＋ 新增記帳</button>
                 </div>
