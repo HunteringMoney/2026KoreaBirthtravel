@@ -86,76 +86,32 @@
             background: var(--glass-bg); border-radius: 16px; padding: 16px;
             margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             border: 1px solid rgba(255,255,255,0.8);
-            transition: all 0.3s ease; /* 動畫過渡 */
+            transition: all 0.3s ease;
         }
         .card.backup { background: #fffbeb; border: 2px dashed #fbbf24; }
 
-        /* --- ⏰ 時間軸狀態樣式 (v90 新增) --- */
-        
-        /* 1. 已完成 (灰) */
-        .status-done {
-            filter: grayscale(100%);
-            opacity: 0.6;
-            background: #f3f4f6;
-        }
+        /* --- ⏰ 時間軸狀態樣式 --- */
+        .status-done { filter: grayscale(100%); opacity: 0.6; background: #f3f4f6; }
+        .status-active { border: 2px solid #ec4899; background: white; position: relative; animation: pulse-card 2s infinite; z-index: 10; }
+        .status-active::before { content: "🔥 進行中"; position: absolute; top: -12px; right: 15px; background: #ec4899; color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        .status-next { border: 2px solid #3b82f6; background: #eff6ff; position: relative; }
+        .status-next::before { content: "🔜 下一站"; position: absolute; top: -12px; right: 15px; background: #3b82f6; color: white; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold; }
+        @keyframes pulse-card { 0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); } 100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); } }
 
-        /* 2. 進行中 (跳動高亮) */
-        .status-active {
-            border: 2px solid #ec4899;
-            background: white;
-            position: relative;
-            animation: pulse-card 2s infinite;
-            z-index: 10;
-        }
-        /* 進行中標籤 */
-        .status-active::before {
-            content: "🔥 進行中 / Now";
-            position: absolute; top: -12px; right: 15px;
-            background: #ec4899; color: white; font-size: 11px;
-            padding: 2px 8px; border-radius: 10px; font-weight: bold;
-        }
-
-        /* 3. 下一站 (藍框) */
-        .status-next {
-            border: 2px solid #3b82f6;
-            background: #eff6ff;
-        }
-        .status-next::before {
-            content: "🔜 下一站 / Next";
-            position: absolute; top: -12px; right: 15px;
-            background: #3b82f6; color: white; font-size: 11px;
-            padding: 2px 8px; border-radius: 10px; font-weight: bold;
-            position: absolute;
-        }
-
-        /* 呼吸燈動畫 */
-        @keyframes pulse-card {
-            0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
-        }
-
-        
         .card-header { display: flex; align-items: center; margin-bottom: 8px; }
         .time-tag { background: #f3f4f6; color: #6b7280; font-size: 13px; font-weight: bold; padding: 4px 8px; border-radius: 6px; margin-right: 10px; min-width: 55px; text-align: center; }
         .card-title { font-size: 18px; font-weight: bold; color: #111827; line-height: 1.3; flex: 1; }
         .card-icon { font-size: 22px; margin-right: 8px; }
         
         /* 交通標籤樣式 */
-        .trans-badge {
-            display: block; padding: 8px 12px; border-radius: 8px; 
-            font-size: 14px; font-weight: bold; margin-top: 8px;
-            line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        .trans-taxi { background: #fff7ed; color: #c2410c; border-left: 4px solid #f97316; } /* 橘色-計程車 */
-        .trans-metro { background: #ecfdf5; color: #047857; border-left: 4px solid #10b981; } /* 綠色-地鐵 */
-        .trans-walk { background: #eff6ff; color: #1d4ed8; border-left: 4px solid #3b82f6; } /* 藍色-步行 */
-        .trans-bus { background: #fefce8; color: #854d0e; border-left: 4px solid #eab308; } /* 黃色-巴士 */
+        .trans-badge { display: block; padding: 8px 12px; border-radius: 8px; font-size: 14px; font-weight: bold; margin-top: 8px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .trans-taxi { background: #fff7ed; color: #c2410c; border-left: 4px solid #f97316; }
+        .trans-metro { background: #ecfdf5; color: #047857; border-left: 4px solid #10b981; }
+        .trans-walk { background: #eff6ff; color: #1d4ed8; border-left: 4px solid #3b82f6; }
+        .trans-bus { background: #fefce8; color: #854d0e; border-left: 4px solid #eab308; }
 
         .menu-style { background: #faf5ff; color: #7e22ce; border-left: 3px solid #a855f7; padding: 8px 10px; border-radius: 8px; font-size: 14px; margin-top: 8px; }
         .hours-style { display: inline-block; font-size: 13px; color: #059669; margin-top: 6px; font-weight: 600; background: rgba(209, 250, 229, 0.6); padding: 4px 8px; border-radius: 6px; }
-        
-        /* 時間警告 */
         .time-warning { display: inline-block; font-size: 12px; font-weight: bold; margin-left: 5px; padding: 4px 8px; border-radius: 6px; animation: pulse 2s infinite; }
         .warn-closed { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
         .warn-soon { background: #ffedd5; color: #c2410c; border: 1px solid #fdba74; }
@@ -167,26 +123,12 @@
 
         /* 景點詳情 */
         .detail-area { display: none; margin-top: 12px; background: #f8fafc; border-radius: 8px; padding: 12px; border: 1px solid #e2e8f0; font-size: 14px; }
-        .detail-row { display: flex; margin-bottom: 6px; }
-        .detail-label { font-weight: bold; color: #64748b; width: 40px; flex-shrink: 0; }
-        .detail-content { color: #334155; line-height: 1.4; }
-
+        
         /* 按鈕群組 */
-        .btn-row { 
-            display: flex; gap: 8px; margin-top: 15px; 
-            flex-wrap: wrap; /* 允許換行 */
-        }
-        .action-btn { 
-            flex: 1 0 40%; /* 確保按鈕寬度 */
-            border: none; padding: 12px 5px; border-radius: 12px; 
-            font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; 
-            text-decoration: none; display: flex; align-items: center; justify-content: center; 
-            gap: 6px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); 
-            min-width: 0; color: inherit;
-        }
+        .btn-row { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
+        .action-btn { flex: 1 0 40%; border: none; padding: 12px 5px; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); min-width: 0; color: inherit; }
         .btn-icon-lg { font-size: 1.4em; line-height: 1; display: inline-block; }
 
-        /* 顏色設定 */
         .map-btn { background: #03C75A !important; color: white !important; }
         .driver-btn { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white !important; }
         .video-btn { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
@@ -211,7 +153,14 @@
         .btn-speak { background: #e0e7ff; color: #4338ca; }
         .section-title { font-size: 15px; font-weight: bold; color: #4b5563; margin: 20px 0 10px 5px; }
 
-        /* 預算 */
+        /* 預算 (v91升級) */
+        .budget-summary { background:white; padding:15px; border-radius:16px; margin-bottom:20px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+        .summary-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+        .summary-row span { font-size:14px; color:#666; font-weight:bold; }
+        .summary-input { width:120px; text-align:right; padding:5px; border:1px solid #ddd; border-radius:6px; font-weight:bold; font-size:16px; color:#333; }
+        .highlight-red { color: #dc2626; font-weight: bold; font-size: 16px; }
+        .highlight-green { color: #059669; font-weight: 800; font-size: 20px; }
+        
         .budget-form { background: white; border-radius: 16px; padding: 15px; margin-bottom: 20px; }
         .form-row { display: flex; gap: 10px; margin-bottom: 10px; width: 100%; }
         .form-input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 14px; box-sizing: border-box; min-width: 0; }
@@ -318,7 +267,7 @@
     <div id="toast">已複製到剪貼簿！</div>
 
     <script>
-        // --- 1. 資料庫 (完整行程 v90) ---
+        // --- 1. 資料庫 (完整行程 v91) ---
         // 交通代碼：type 1=Taxi(Orange), 2=Metro(Green), 3=Walk(Blue), 4=Bus(Yellow)
         var tripData = [
             { day: "Day 1 (三)", date: "02/11", events: [
@@ -595,9 +544,12 @@
                 {id: 'other', name: '其他', icon: '📝'}
             ];
             
+            // 1. 讀取資料
             var ex = JSON.parse(localStorage.getItem('seoul_expenses')) || [];
-            var total = ex.reduce((a,b)=>a+b.amt, 0);
-            
+            var totalEx = ex.reduce((a,b)=>a+b.amt, 0); // 總支出
+            var totalCash = parseInt(localStorage.getItem('seoul_total_cash')) || 0; // 手頭現金 (預設0)
+            var balance = totalCash - totalEx; // 剩餘現金
+
             var optionsHtml = categories.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
             
             var listHtml = ex.map((x, i) => {
@@ -609,16 +561,29 @@
                     </div>
                     <div style="text-align:right">
                         <div style="color:#be185d; font-weight:bold;">₩${x.amt.toLocaleString()}</div>
-                        <div onclick="delEx(${i})" style="color:#999; font-size:12px; margin-top:5px;">刪除</div>
+                        <div onclick="delEx(${i})" style="color:#999; font-size:12px; margin-top:5px; cursor:pointer;">刪除</div>
                     </div>
                 </div>`;
             }).join('');
 
+            // 2. 渲染介面 (含現金設定區)
             document.getElementById("budget-view").innerHTML = `
                 <div class="budget-summary">
-                    <div class="total-label">總花費</div>
-                    <div class="total-amount">₩${total.toLocaleString()}</div>
+                    <div class="summary-row">
+                        <span>💵 手頭韓幣現金 (Initial Cash)</span>
+                        <input type="number" id="total_cash_input" value="${totalCash}" onchange="saveTotalCash()" class="summary-input" placeholder="0">
+                    </div>
+                    <div class="summary-row">
+                        <span>💸 目前總支出 (Total Spent)</span>
+                        <span class="highlight-red">- ₩${totalEx.toLocaleString()}</span>
+                    </div>
+                    <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+                    <div class="summary-row">
+                        <span style="font-size:16px; color:#333;">💰 剩餘現金 (Remaining)</span>
+                        <span class="highlight-green" style="color:${balance >= 0 ? '#059669' : '#dc2626'}">₩${balance.toLocaleString()}</span>
+                    </div>
                 </div>
+
                 <div class="budget-form">
                     <div class="form-row">
                         <select id="ex_cat" class="form-select">${optionsHtml}</select>
@@ -631,6 +596,13 @@
                 </div>
                 <div class="expense-list">${listHtml}</div>
             `;
+        }
+
+        // 新增存錢函數
+        function saveTotalCash() {
+            var val = document.getElementById('total_cash_input').value;
+            localStorage.setItem('seoul_total_cash', val);
+            renderBudgetView(); // 重刷以更新餘額
         }
 
         function renderSosView() {
