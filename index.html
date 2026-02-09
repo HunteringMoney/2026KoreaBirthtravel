@@ -81,13 +81,60 @@
         /* 內容容器 */
         .container { padding: 20px 15px; max-width: 600px; margin: 0 auto; }
 
-        /* 行程卡片 */
+        /* 行程卡片基礎 */
         .card {
             background: var(--glass-bg); border-radius: 16px; padding: 16px;
             margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             border: 1px solid rgba(255,255,255,0.8);
+            transition: all 0.3s ease; /* 動畫過渡 */
         }
         .card.backup { background: #fffbeb; border: 2px dashed #fbbf24; }
+
+        /* --- ⏰ 時間軸狀態樣式 (v90 新增) --- */
+        
+        /* 1. 已完成 (灰) */
+        .status-done {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            background: #f3f4f6;
+        }
+
+        /* 2. 進行中 (跳動高亮) */
+        .status-active {
+            border: 2px solid #ec4899;
+            background: white;
+            position: relative;
+            animation: pulse-card 2s infinite;
+            z-index: 10;
+        }
+        /* 進行中標籤 */
+        .status-active::before {
+            content: "🔥 進行中 / Now";
+            position: absolute; top: -12px; right: 15px;
+            background: #ec4899; color: white; font-size: 11px;
+            padding: 2px 8px; border-radius: 10px; font-weight: bold;
+        }
+
+        /* 3. 下一站 (藍框) */
+        .status-next {
+            border: 2px solid #3b82f6;
+            background: #eff6ff;
+        }
+        .status-next::before {
+            content: "🔜 下一站 / Next";
+            position: absolute; top: -12px; right: 15px;
+            background: #3b82f6; color: white; font-size: 11px;
+            padding: 2px 8px; border-radius: 10px; font-weight: bold;
+            position: absolute;
+        }
+
+        /* 呼吸燈動畫 */
+        @keyframes pulse-card {
+            0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(236, 72, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+        }
+
         
         .card-header { display: flex; align-items: center; margin-bottom: 8px; }
         .time-tag { background: #f3f4f6; color: #6b7280; font-size: 13px; font-weight: bold; padding: 4px 8px; border-radius: 6px; margin-right: 10px; min-width: 55px; text-align: center; }
@@ -271,7 +318,7 @@
     <div id="toast">已複製到剪貼簿！</div>
 
     <script>
-        // --- 1. 資料庫 (完整行程 v88) ---
+        // --- 1. 資料庫 (完整行程 v90) ---
         // 交通代碼：type 1=Taxi(Orange), 2=Metro(Green), 3=Walk(Blue), 4=Bus(Yellow)
         var tripData = [
             { day: "Day 1 (三)", date: "02/11", events: [
@@ -279,7 +326,7 @@
                 { connect: "⬇️ 孔德站下車，走 2 號出口 (有電梯)" },
                 { time: "20:00", icon: "🚇", title: "孔德站 (轉乘/出站)", trans: "🚶 步行約 600公尺 (約8-10分鐘)", transType: 3 },
                 { time: "20:45", icon: "🏨", title: "Roynet Hotel Check-in", note: "先放行李，稍作休息", open: "15:00 - 23:59", map: "로이넷호텔 서울 마포" },
-                { connect: "⬇️ 出飯店過大馬路(麻浦大路)後，往餐廳街走" },
+                { connect: "⬇️ 過馬路後，沿著熱鬧的餐廳街走" },
                 { time: "21:20", icon: "🥩", title: "晚餐：元祖趙朴家", menu: "調味豬排骨、蘿蔔冷麵、甜米露", open: "11:30 - 22:00", map: "원조조박집 본관", video: "hQTMdak-XfY",
                   desc: "麻浦區最知名的烤豬排骨老店，肉質軟嫩，附贈的甜米露是絕配。", price: "預算: ₩18,000/人", trans: "🚶 步行約 8 分鐘", transType: 3 },
                 { connect: "⬇️ 步行約 8 分鐘回飯店" },
@@ -321,6 +368,8 @@
                 { time: "15:20", icon: "☕", title: "New Mix Coffee", note: "必買精品即溶咖啡", map: "뉴믹스커피" },
                 { time: "15:30", icon: "🥐", title: "自然島鹽麵包", menu: "鹽麵包 (4入一組)", open: "09:00 - 售完", map: "자연도소금빵 성수" },
                 { time: "16:10", icon: "💙", title: "Human Made", note: "愛心T恤", map: "휴먼메이드 성수" },
+                { time: "16:15", icon: "☕", title: "白老師咖啡", note: "俗又大碗，補血用", map: "빽다방 홍대", trans: "🚶 步行", transType: 3 },
+                { time: "16:30", icon: "👕", title: "Musinsa Standard", note: "弘大旗艦店", open: "11:00 - 21:00", map: "무신사 스탠다드 홍대", trans: "🚶 步行", transType: 3 },
                 { time: "16:50", icon: "💎", title: "Tamburins & Dior", note: "Jennie 香氛 & Jisoo 概念店", open: "11:00 - 21:00", map: "디올 성수", video: "2PBL-ZqZ3iE",
                   desc: "Dior 聖水概念店，建築外觀絕美，晚上點燈更漂亮。", price: "免費 (需預約或排隊)", duration: "30 分鐘", trans: "🚶 聖水洞皆為步行", transType: 3 },
                 { time: "18:00", icon: "🍖", title: "晚餐：大成排骨", menu: "調味排骨、泡菜鍋 & 醬蟹", open: "12:00 - 21:00", map: "대성갈비",
@@ -417,6 +466,10 @@
             h.style.cssText = "margin-bottom:10px; color:#666; font-size:14px; padding-left:5px;";
             div.appendChild(h);
 
+            // 取得現在時間 (用於比對)
+            var now = new Date();
+            var nextEventFound = false; // 標記是否已找到下一個行程
+
             day.events.forEach((e, idx) => {
                 if(e.connect) {
                     div.innerHTML += `<div class="connector"><span>${e.connect}</span></div>`;
@@ -441,8 +494,46 @@
                 
                 var transHtml = e.trans ? `<div class="trans-badge ${transClass}">${e.trans}</div>` : "";
 
+                // --- ⏰ 時間軸核心邏輯 ---
+                var statusClass = ""; // status-done, status-active, status-next
+                
+                // 1. 解析日期 (例如 "02/11")
+                var dateParts = day.date.split('(')[0].trim().split('/');
+                var month = parseInt(dateParts[0]);
+                var dateNum = parseInt(dateParts[1]);
+                
+                // 2. 解析時間 (例如 "19:15")
+                if (e.time) {
+                    var timeParts = e.time.split(':');
+                    var hour = parseInt(timeParts[0]);
+                    var min = parseInt(timeParts[1]);
+
+                    // 設定此行程的「開始時間」物件
+                    var eventStart = new Date();
+                    eventStart.setFullYear(2026); // 設定年份為 2026
+                    eventStart.setMonth(month - 1);
+                    eventStart.setDate(dateNum);
+                    eventStart.setHours(hour, min, 0);
+
+                    // 設定此行程的「結束時間」物件 (預設為開始後 90 分鐘，或下一個行程開始前)
+                    var eventEnd = new Date(eventStart);
+                    // 簡單預設每個行程約 1.5 ~ 2 小時
+                    eventEnd.setMinutes(eventEnd.getMinutes() + 100); 
+
+                    // 比較時間
+                    if (now > eventEnd) {
+                        statusClass = "status-done"; // 已經過期
+                    } else if (now >= eventStart && now <= eventEnd) {
+                        statusClass = "status-active"; // 正在進行中
+                        nextEventFound = true; // 既然正在進行，就不需要標示下一個了
+                    } else if (now < eventStart && !nextEventFound) {
+                        statusClass = "status-next"; // 還沒開始，且是第一個遇到的未來行程
+                        nextEventFound = true; // 標記已找到，後面的行程就不標示藍框了
+                    }
+                }
+
                 var card = document.createElement("div");
-                card.className = "card" + (e.backup ? " backup" : "");
+                card.className = "card " + (e.backup ? "backup " : "") + statusClass;
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="time-tag">${e.time}</span>
