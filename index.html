@@ -125,7 +125,7 @@
             font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; 
             text-decoration: none; display: flex; align-items: center; justify-content: center; 
             gap: 6px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); 
-            min-width: 0; color: inherit; /* 確保超連結文字顏色正確 */
+            min-width: 0; color: inherit;
         }
         .btn-icon-lg { font-size: 1.4em; line-height: 1; display: inline-block; }
 
@@ -200,7 +200,7 @@
                     <p>2026/02/12 Happy Birthday! 🇰🇷</p>
                 </div>
                 <div class="top-actions">
-                    <a href="https://www.google.com/maps/search/?api=1&query=toilet" target="_blank" class="header-btn toilet-btn">🚽 廁所</a>
+                    <a href="https://m.map.naver.com/search2/search.naver?query=%ED%99%94%EC%9E%A5%EC%8B%A4" target="_blank" class="header-btn toilet-btn">🚽 廁所</a>
                     <button class="header-btn family-btn" onclick="openLocModal()">📍 家人</button>
                     <a href="https://map.konest.com/psubway" target="_blank" class="header-btn metro-btn">🚇 地鐵</a>
                 </div>
@@ -241,7 +241,7 @@
             <h2 style="margin-top:0; font-size:20px;">📍 家人位置分享</h2>
             <p style="font-size:13px; color:#666; margin-bottom:20px;">使用前請確認家人已開啟分享</p>
             <div class="loc-btn-group">
-                <a href="https://maps.google.com/" target="_blank" class="loc-big-btn google">🗺️ Google 地圖分享</a>
+                <a href="https://www.google.com/maps" target="_blank" class="loc-big-btn google">🗺️ Google 地圖分享</a>
                 <a href="findmy://" class="loc-big-btn apple">🍏 Apple 尋找 (Find My)</a>
                 <button onclick="sendMyLoc()" class="loc-big-btn sos">📡 傳送我的位置</button>
             </div>
@@ -441,7 +441,7 @@
                     <div class="btn-row">
                         ${e.kr ? `<button class="action-btn driver-btn" onclick="showKR('${e.kr}')"><span class="btn-icon-lg">🔍</span> 給司機</button>` : ""}
                         
-                        ${e.map ? `<a href="nmap://search?query=${encodeURIComponent(e.map)}&appname=seoul_trip" target="_blank" class="action-btn map-btn"><span class="btn-icon-lg">📲</span> 啟動 Naver App</a>` : ""}
+                        ${e.map ? `<a href="https://m.map.naver.com/search2/search.naver?query=${encodeURIComponent(e.map)}" target="_blank" class="action-btn map-btn"><span class="btn-icon-lg">🗺️</span> Naver 地圖</a>` : ""}
                         
                         ${e.video ? `<a href="https://www.youtube.com/watch?v=${e.video}" target="_blank" class="action-btn video-btn"><span class="btn-icon-lg">▶️</span> 影片</a>` : ""}
                         
@@ -552,8 +552,9 @@
             document.getElementById('m-kr').innerText = txt; 
             document.getElementById('modal').style.display='flex'; 
         }
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
+        function closeVidModal() {
+            document.getElementById('vid-modal').style.display = 'none';
+            document.getElementById('vid-frame').src = "";
         }
         function speak(txt) {
             window.speechSynthesis.cancel();
@@ -562,7 +563,7 @@
             window.speechSynthesis.speak(u);
         }
         function findRestroom() {
-            window.open("https://www.google.com/maps/search/?api=1&query=toilet", "_blank");
+            window.open("https://m.map.naver.com/search2/search.naver?query=%ED%99%94%EC%9E%A5%EC%8B%A4", "_blank");
         }
         function openLocModal() {
             document.getElementById('loc-modal').style.display = 'flex';
