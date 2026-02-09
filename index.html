@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>老婆生日之旅 x 雨霏13Y+昕芮11Y</title>
+    <style>
+        /* --- 核心樣式 --- */
+        :root {
+            --primary: #4f46e5;
+            --secondary: #ec4899;
+            --tertiary: #8b5cf6;
+            --bg-grad-start: #a18cd1;
+            --bg-grad-end: #fbc2eb;
+            --glass-bg: rgba(255, 255, 255, 0.96);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+            margin: 0; padding: 0; color: #333;
+            min-height: 100vh; padding-bottom: 90px;
+        }
+
+        /* 置頂容器 */
+        .sticky-top-wrapper {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content { padding: 12px 16px 5px 16px; }
+        
+        .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .header-title h1 { margin: 0; font-size: 18px; color: #1f2937; font-weight: 800; line-height: 1.3; }
+        .header-title p { margin: 2px 0 0; font-size: 12px; color: #db2777; font-weight: bold; }
+        
+        /* 頂部按鈕區 */
+        .top-actions { display: flex; gap: 8px; justify-content: flex-end; width: 60%; }
+        .header-btn {
+            border-radius: 20px; padding: 6px 12px; font-size: 13px; font-weight: bold;
+            cursor: pointer; display: flex; align-items: center; gap: 4px; text-decoration: none;
+            border: 1px solid transparent; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .toilet-btn { color: #2563eb; border-color: #bfdbfe; background: #eff6ff; }
+        .family-btn { color: #db2777; border-color: #fbcfe8; background: #fdf2f8; }
+        .metro-btn { color: #059669; border-color: #a7f3d0; background: #ecfdf5; }
+
+        /* 天氣 */
+        .weather-widget {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            border-radius: 12px; padding: 10px 15px;
+            color: white; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+            margin-bottom: 10px;
+        }
+        .weather-main { display: flex; align-items: center; justify-content: space-between; }
+        .weather-left { display: flex; align-items: center; gap: 10px; }
+        .w-icon { font-size: 32px; }
+        .w-temp { font-size: 26px; font-weight: 800; }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex; gap: 8px; overflow-x: auto; 
+            padding: 0 16px 12px 16px; -webkit-overflow-scrolling: touch;
+        }
+        .tabs-container::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            padding: 8px 16px; border-radius: 20px; border: 1px solid #e5e7eb;
+            background: #f9fafb; color: #4b5563; font-size: 13px; font-weight: bold; white-space: nowrap;
+            transition: all 0.2s; flex-shrink: 0;
+        }
+        .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3); }
+        .tab-btn.budget-tab.active { background: var(--secondary); border-color: var(--secondary); }
+        .tab-btn.lang-tab.active { background: var(--tertiary); border-color: var(--tertiary); }
+        .tab-btn.sos-tab.active { background: #ef4444; border-color: #ef4444; color: white; }
+
+        /* 內容容器 */
+        .container { padding: 20px 15px; max-width: 600px; margin: 0 auto; }
+
+        /* 行程卡片 */
+        .card {
+            background: var(--glass-bg); border-radius: 16px; padding: 16px;
+            margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .card.backup { background: #fffbeb; border: 2px dashed #fbbf24; }
+        
+        .card-header { display: flex; align-items: center; margin-bottom: 8px; }
+        .time-tag { background: #f3f4f6; color: #6b7280; font-size: 13px; font-weight: bold; padding: 4px 8px; border-radius: 6px; margin-right: 10px; min-width: 55px; text-align: center; }
+        .card-title { font-size: 18px; font-weight: bold; color: #111827; line-height: 1.3; flex: 1; }
+        .card-icon { font-size: 22px; margin-right: 8px; }
+        
+        .info-block { margin-top: 8px; padding: 8px 10px; border-radius: 8px; font-size: 14px; line-height: 1.5; }
+        .trans-style { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
+        .menu-style { background: #fff7ed; color: #9a3412; border-left: 3px solid #f97316; }
+        .hours-style { display: inline-block; font-size: 13px; color: #059669; margin-top: 6px; font-weight: 600; background: rgba(209, 250, 229, 0.6); padding: 4px 8px; border-radius: 6px; }
+        
+        /* 時間警告 */
+        .time-warning { display: inline-block; font-size: 12px; font-weight: bold; margin-left: 5px; padding: 4px 8px; border-radius: 6px; animation: pulse 2s infinite; }
+        .warn-closed { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .warn-soon { background: #ffedd5; color: #c2410c; border: 1px solid #fdba74; }
+        @keyframes pulse { 0% {opacity:1;} 50% {opacity:0.7;} 100% {opacity:1;} }
+
+        .note-style { font-size: 13px; color: #6b7280; margin-top: 8px; padding-left: 10px; border-left: 3px solid #d1d5db; }
+        .connector { text-align: center; padding: 10px 0; color: #666; font-size: 12px; font-weight: bold; opacity: 0.8; }
+        .connector span { background: rgba(255,255,255,0.6); padding: 4px 12px; border-radius: 12px; }
+
+        /* 景點詳情 */
+        .detail-area { display: none; margin-top: 12px; background: #f8fafc; border-radius: 8px; padding: 12px; border: 1px solid #e2e8f0; font-size: 14px; }
+        .detail-row { display: flex; margin-bottom: 6px; }
+        .detail-label { font-weight: bold; color: #64748b; width: 40px; flex-shrink: 0; }
+        .detail-content { color: #334155; line-height: 1.4; }
+
+        /* 按鈕群組 */
+        .btn-row { 
+            display: flex; gap: 8px; margin-top: 15px; 
+            flex-wrap: wrap; /* 允許換行 */
+        }
+        .action-btn { 
+            flex: 1 0 40%; /* 確保按鈕寬度 */
+            border: none; padding: 12px 5px; border-radius: 12px; 
+            font-size: 15px; font-weight: bold; cursor: pointer; text-align: center; 
+            text-decoration: none; display: flex; align-items: center; justify-content: center; 
+            gap: 6px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); 
+            min-width: 0; color: inherit; /* 確保超連結文字顏色正確 */
+        }
+        .btn-icon-lg { font-size: 1.4em; line-height: 1; display: inline-block; }
+
+        /* 顏色設定 */
+        .map-btn { background: #03C75A !important; color: white !important; }
+        .driver-btn { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white !important; }
+        .video-btn { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+        .info-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
+        .note-btn { background: #f3f4f6; color: #4b5563; border: 1px solid #d1d5db; flex: 0 0 44px; font-size: 18px; padding: 0; margin-left: auto; }
+        .note-btn.has-note { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+
+        /* 筆記 */
+        .note-area { display: none; margin-top: 12px; background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 10px; }
+        .note-textarea { width: 100%; height: 80px; border: none; outline: none; font-size: 14px; resize: none; background: transparent; margin-bottom: 8px; }
+        .save-btn { background: #4f46e5; color: white; border: none; padding: 6px 12px; border-radius: 6px; float: right; font-weight: bold; }
+        .saved-note { margin-top: 10px; padding: 10px; background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 6px; display: none; }
+
+        /* 翻譯 */
+        .phrase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .phrase-card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .ph-zh { font-size: 15px; font-weight: bold; color: #5b21b6; margin-bottom: 4px; }
+        .ph-kr { font-size: 16px; color: #1f2937; font-weight: 500; }
+        .ph-pro { font-size: 12px; color: #666; margin-bottom: 8px; }
+        .ph-actions { display: flex; gap: 8px; margin-top: 8px; }
+        .ph-btn { flex: 1; padding: 8px; border-radius: 6px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; background: #f3f4f6; }
+        .btn-speak { background: #e0e7ff; color: #4338ca; }
+        .section-title { font-size: 15px; font-weight: bold; color: #4b5563; margin: 20px 0 10px 5px; }
+
+        /* 預算 */
+        .budget-form { background: white; border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .form-row { display: flex; gap: 10px; margin-bottom: 10px; width: 100%; }
+        .form-input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 14px; box-sizing: border-box; min-width: 0; }
+        .input-desc { flex: 7; } .input-amt { flex: 3; text-align: right; }
+        .form-select { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; background: white; }
+        .add-expense-btn { width: 100%; padding: 12px; background: #111827; color: white; border: none; border-radius: 10px; font-weight: bold; }
+        .expense-item { background: white; border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .ex-cat-icon { font-size: 24px; margin-right: 10px; width: 30px; text-align: center; }
+
+        /* SOS */
+        .sos-btn { display: block; width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 12px; text-align: center; color: white; text-decoration: none; font-weight: bold; font-size: 16px; }
+        .sos-112 { background: #1f2937; } .sos-119 { background: #dc2626; } .sos-tw { background: #059669; }
+
+        /* Modal */
+        #modal, #loc-modal, #vid-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        .modal-kr { color: #fbbf24; font-size: 40px; font-weight: 800; text-align: center; margin: 20px; line-height: 1.3; }
+        .modal-cn { color: #fff; font-size: 20px; margin-bottom: 30px; font-weight: bold; }
+        .close-hint { padding: 8px 20px; border: 1px solid rgba(255,255,255,0.5); border-radius: 20px; color: rgba(255,255,255,0.8); cursor: pointer; }
+        
+        .loc-btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 300px; }
+        .loc-big-btn { background: #333; color: white; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; }
+        .loc-big-btn.google { background: #4285F4; }
+        .loc-big-btn.apple { background: #000000; border: 1px solid #333; }
+        .loc-big-btn.sos { background: #ef4444; }
+
+        .video-container { width: 100%; max-width: 600px; aspect-ratio: 16/9; background: black; }
+        iframe { width: 100%; height: 100%; border: none; }
+        .yt-external-btn { display: inline-block; margin-top: 15px; padding: 10px 20px; background: #ff0000; color: white; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        
+        #toast { visibility: hidden; min-width: 200px; background-color: #333; color: #fff; text-align: center; border-radius: 30px; padding: 12px; position: fixed; z-index: 10000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 14px; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+    </style>
+</head>
+<body>
+
+    <div class="sticky-top-wrapper">
+        <div class="header-content">
+            <div class="header-top">
+                <div class="header-title">
+                    <h1>老婆生日之旅 x 雨霏13Y+昕芮11Y</h1>
+                    <p>2026/02/12 Happy Birthday! 🇰🇷</p>
+                </div>
+                <div class="top-actions">
+                    <a href="https://www.google.com/maps/search/?api=1&query=toilet" target="_blank" class="header-btn toilet-btn">🚽 廁所</a>
+                    <button class="header-btn family-btn" onclick="openLocModal()">📍 家人</button>
+                    <a href="https://map.konest.com/psubway" target="_blank" class="header-btn metro-btn">🚇 地鐵</a>
+                </div>
+            </div>
+            
+            <div id="weather-box" class="weather-widget">
+                <div class="weather-main">
+                    <div class="weather-left">
+                        <span id="w-icon" class="w-icon">⌛</span>
+                        <div>
+                            <div style="font-size:12px;">首爾即時氣溫</div>
+                            <div id="w-temp" class="w-temp">--°C</div>
+                        </div>
+                    </div>
+                    <div id="w-range" class="weather-right">--° / --°</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabs" class="tabs-container"></div>
+    </div>
+
+    <div class="container">
+        <div id="list"></div>
+        <div id="budget-view" style="display:none;"></div>
+        <div id="lang-view" style="display:none;"></div>
+        <div id="sos-view" style="display:none;"></div>
+    </div>
+
+    <div id="modal" onclick="this.style.display='none'">
+        <div style="color:#fff; font-size:18px;">請載我去 / To here please:</div>
+        <div id="m-kr" class="modal-kr"></div>
+        <div style="color:#aaa; border:1px solid #aaa; padding:5px 15px; border-radius:20px;">點擊關閉</div>
+    </div>
+
+    <div id="loc-modal" onclick="if(event.target===this) closeLocModal()">
+        <div style="background: white; padding: 25px; border-radius: 20px; width: 90%; max-width: 350px; text-align: center; color: #333;">
+            <h2 style="margin-top:0; font-size:20px;">📍 家人位置分享</h2>
+            <p style="font-size:13px; color:#666; margin-bottom:20px;">使用前請確認家人已開啟分享</p>
+            <div class="loc-btn-group">
+                <a href="https://maps.google.com/" target="_blank" class="loc-big-btn google">🗺️ Google 地圖分享</a>
+                <a href="findmy://" class="loc-big-btn apple">🍏 Apple 尋找 (Find My)</a>
+                <button onclick="sendMyLoc()" class="loc-big-btn sos">📡 傳送我的位置</button>
+            </div>
+            <div onclick="closeLocModal()" style="margin-top:20px; padding:10px; color:#999; font-size:14px; cursor:pointer;">關閉視窗</div>
+        </div>
+    </div>
+
+    <div id="vid-modal" onclick="if(event.target===this) closeVidModal()">
+        <div style="width: 100%; max-width: 600px;">
+            <div id="vid-container" class="video-container">
+                <iframe id="vid-frame" src="" allowfullscreen></iframe>
+            </div>
+            <a id="vid-link" href="#" target="_blank" class="yt-external-btn">📺 無法播放？點此去 App 看</a>
+        </div>
+    </div>
+    
+    <div id="toast">已複製到剪貼簿！</div>
+
+    <script>
+        // --- 1. 資料庫 (完整行程) ---
+        var tripData = [
+            { day: "Day 1 (三)", date: "02/11", events: [
+                { time: "19:15", icon: "🛬", title: "抵達金浦機場", trans: "🚶 跟隨 AREX 指標" },
+                { connect: "⬇️ 機場地鐵 (往首爾站)" },
+                { time: "20:00", icon: "🚇", title: "移動：孔德站", trans: "🚇 孔德站下車 ➔ 2號出口 (有電梯)" },
+                { connect: "⬇️ 步行 600m" },
+                { time: "20:45", icon: "🏨", title: "Roynet Hotel Check-in", note: "先放行李，稍作休息", open: "15:00 - 23:59", map: "로이넷호텔 서울 마포" },
+                { connect: "⬇️ 過馬路到對面巷子 (3分鐘)" },
+                { time: "21:20", icon: "🥩", title: "晚餐：元祖趙朴家", menu: "調味豬排骨、蘿蔔冷麵、甜米露", open: "11:30 - 22:00", map: "원조조박집", video: "hQTMdak-XfY",
+                  desc: "麻浦區最知名的烤豬排骨老店，肉質軟嫩，附贈的甜米露是絕配。", price: "預算: ₩18,000/人", duration: "1.5 小時" },
+                { connect: "⬇️ 步行回飯店 (5分鐘)" },
+                { time: "22:45", icon: "🏨", title: "回飯店休息", note: "養精蓄銳，明天早起！" }
+            ]},
+            { day: "Day 2 (四)", date: "02/12 (老婆生日🎂)", events: [
+                { time: "09:00", icon: "🚕", title: "前往景福宮", trans: "🚕 從飯店直接搭計程車", kr: "경복궁 매표소", map: "경복궁" },
+                { time: "09:30", icon: "🏯", title: "景福宮 (純參觀)", note: "逛完從側門 (建春門) 離開", open: "09:00 - 17:00", map: "경복궁", video: "mVQ0ueFjt_4",
+                  desc: "朝鮮王朝第一法宮，建於1395年。必看勤政殿與慶會樓。", price: "門票: ₩3,000", duration: "1.5 - 2 小時" },
+                { connect: "⬇️ 沿石牆路散步約 15 分鐘" },
+                { time: "11:00", icon: "🏘️", title: "北村韓屋村", note: "保持安靜", map: "북촌한옥마을", video: "TArU4_cwE6M",
+                  desc: "保存完整的傳統韓屋聚落，記得保持安靜，不要打擾居民。", price: "免費參觀", duration: "1 小時" },
+                { time: "12:00", icon: "🚕", title: "TNF (萬里洞)", trans: "🚕 旗艦店", kr: "노스페이스 만리동직영점", open: "10:30 - 20:00", map: "노스페이스 홍보관" },
+                { time: "13:00", icon: "🏨", title: "回飯店午休", note: "充電時間" },
+                { time: "16:30", icon: "💰", title: "明洞換錢 & 逛街", open: "至 20:00", map: "명동 대사관환전", video: "scHPC0f2Sg4" },
+                { time: "17:30", icon: "🥩", title: "荒謬的生肉", menu: "五花肉吃到飽", open: "11:00 - 23:00", map: "엉터리생고기 명동", price: "預算: ₩16,800", duration: "1.5 小時" },
+                { time: "18:30", icon: "⭐", title: "POCA SPOT", note: "女兒追星", map: "포카스팟" },
+                { time: "19:30", icon: "🚠", title: "移動：南山纜車", trans: "🚕 搭車去纜車站", kr: "남산케이블카", map: "남산케이블카" },
+                { time: "20:00", icon: "🗼", title: "N首爾塔", open: "10:00 - 23:00", map: "N서울타워", video: "FHWcoQfVtwE",
+                  desc: "首爾地標，可俯瞰360度夜景。", price: "觀景台 ₩21,000", duration: "1 - 1.5 小時" },
+                { time: "21:30", icon: "🚕", title: "移動：回飯店", kr: "로이넷호텔 서울 마포" },
+                { connect: "🛑 雨天/替代方案 (廣藏市場路線)" },
+                { time: "11:45", icon: "🥢", title: "備案：廣藏市場", menu: "生牛肉、綠豆煎餅", backup: true, video: "HybSjjgFUaY", map: "광장시장", desc: "傳統市場美食巡禮" },
+                { time: "13:15", icon: "🚕", title: "交通：市場 ➔ TNF", trans: "🚕 約 15 分鐘", kr: "노스페이스 만리동직영점", backup: true }
+            ]},
+            { day: "Day 3 (五)", date: "02/13", events: [
+                { time: "10:15", icon: "🌲", title: "首爾林公園", note: "Jennie 散步景點", map: "서울숲", video: "7hNxv16FNyI",
+                  desc: "首爾的中央公園，環境優美，適合散步拍照。", price: "免費", duration: "1 - 2 小時" },
+                { time: "12:10", icon: "🍚", title: "午餐：奶奶的食譜", menu: "烤魚套餐、牛骨湯、辣炒豬肉", open: "11:30 - 21:00", map: "할머니의레시피",
+                  desc: "米其林推薦的家常韓式定食，口味清淡精緻。", price: "套餐約 ₩15,000", duration: "1 小時" },
+                { time: "13:30", icon: "🕶️", title: "HAUS NOWHERE", note: "Gentle Monster", open: "11:00 - 21:00", map: "하우스 노웨어 성수",
+                  desc: "結合未來感與藝術的複合式空間，非常好拍。", price: "免費入場", duration: "40 分鐘" },
+                { time: "14:20", icon: "🐰", title: "Miffy & NYUNYU", note: "飾品天堂", map: "뉴뉴 성수" },
+                { time: "15:00", icon: "🧱", title: "大林倉庫", note: "必拍紅磚牆", open: "11:00 - 22:00", map: "성수 대림창고" },
+                { time: "15:15", icon: "🕯️", title: "Hetras 薰香店", note: "平價有質感的擴香", map: "헤트라스 성수" },
+                { time: "15:20", icon: "☕", title: "New Mix Coffee", note: "必買精品即溶咖啡", map: "뉴믹스커피" },
+                { time: "15:30", icon: "🥐", title: "自然島鹽麵包", menu: "鹽麵包 (4入一組)", open: "09:00 - 售完", map: "자연도소금빵 성수" },
+                { time: "16:10", icon: "💙", title: "Human Made", note: "愛心T恤", map: "휴먼메이드 성수" },
+                { time: "16:50", icon: "💎", title: "Tamburins & Dior", note: "Jennie 香氛 & Jisoo 概念店", open: "11:00 - 21:00", map: "디올 성수", video: "2PBL-ZqZ3iE",
+                  desc: "Dior 聖水概念店，建築外觀絕美，晚上點燈更漂亮。", price: "免費 (需預約或排隊)", duration: "30 分鐘" },
+                { time: "18:00", icon: "🍖", title: "晚餐：大成排骨", menu: "調味排骨、泡菜鍋 & 醬蟹", open: "12:00 - 21:00", map: "대성갈비",
+                  desc: "聖水洞排骨街老店，炭火香氣十足。", price: "預算: ₩17,000/人", duration: "1.5 小時" },
+                { connect: "⬇️ 搭計程車回飯店" },
+                { time: "20:00", icon: "🚕", title: "移動：回飯店", trans: "🚕 吃飽搭車回家", kr: "로이넷호텔 서울 마포" }
+            ]},
+            { day: "Day 4 (六)", date: "02/14", events: [
+                { time: "10:00", icon: "💆‍♀️", title: "Orta Clinic (做臉)", note: "Seoho Building 3F", open: "10:00 - 16:00", map: "오르타의원" },
+                { time: "13:00", icon: "📚", title: "星空圖書館 (COEX)", note: "網美必拍圖書館", open: "10:30 - 22:00", map: "별마당 도서관", video: "BFZqnRhNnpI",
+                  desc: "位於 COEX 商場內，高達13米的書牆非常壯觀。", price: "免費", duration: "1 小時" },
+                { connect: "⬇️ 搭地鐵 2 號線 (三成站 ➔ 江南站)" },
+                { time: "16:00", icon: "🛍️", title: "江南地下街", trans: "🚇 搭乘地鐵2號線至江南站，站內直通", open: "10:00 - 22:00", map: "강남역 지하쇼핑센터" },
+                { time: "18:00", icon: "🐔", title: "晚餐：夢村鐵板雞", menu: "韓方辣炒雞、冷烏龍麵", open: "11:30 - 21:30", map: "몽촌닭갈비" },
+                { time: "20:00", icon: "🚶", title: "石村湖水公園", note: "飯後散步，看樂天世界塔夜景", map: "석촌호수" },
+                { connect: "⬇️ 搭計程車跨江" },
+                { time: "21:00", icon: "🚕", title: "移動：回飯店", kr: "로이넷호텔 서울 마포" }
+            ]},
+            { day: "Day 5 (日)", date: "02/15", events: [
+                { time: "09:30", icon: "🚕", title: "移動：去梨花女大", trans: "🚕 直接搭車去正門拍照", kr: "이화여자대학교 정문", map: "이화여자대학교" },
+                { time: "12:00", icon: "🐟", title: "午餐：風川鰻魚", menu: "炭烤鰻魚、泡菜捲麵", open: "11:00 - 22:30", map: "풍천장어 연남점",
+                  desc: "現殺現烤的活鰻魚，外皮酥脆肉質Q彈。", price: "預算: 兩條 ₩78,000", duration: "1.5 小時" },
+                { time: "13:35", icon: "☕", title: "Antique Coffee", menu: "髒髒奶油拿鐵、髒髒抹茶可頌", open: "10:00 - 22:00", map: "앤티크커피 연남점" },
+                { time: "15:00", icon: "🛍️", title: "大創 (弘大2號店)", note: "7層樓旗艦店", map: "다이소 홍대2호점" },
+                { time: "16:30", icon: "👕", title: "Musinsa Standard", note: "弘大旗艦店", open: "11:00 - 21:00", map: "무신사 스탠다드 홍대" },
+                { time: "17:30", icon: "⭐", title: "idOLSTORE", note: "偶像周邊", map: "아이돌스토어" },
+                { time: "18:00", icon: "💊", title: "弘益藥局", note: "最後補貨", map: "홍익약국" },
+                { time: "19:00", icon: "🛒", title: "樂天超市 (首爾站)", note: "最後採買伴手禮", open: "10:00 - 23:00", map: "롯데마트 서울역점" },
+                { connect: "⬇️ 搭計程車 (大包小包)" },
+                { time: "20:30", icon: "🚕", title: "移動：回飯店", kr: "로이넷호텔 서울 마포" }
+            ]},
+            { day: "Day 6 (一)", date: "02/16", events: [
+                { time: "09:10", icon: "🥣", title: "早餐：元祖麻浦屋", menu: "韓牛雪濃湯 (米其林推薦)", open: "07:00 - 21:00", map: "마포옥" },
+                { time: "11:15", icon: "🚌", title: "搭機場巴士 6015", trans: "🚌 確認往「仁川機場」，上車付現", note: "票價：成人 ₩17,000 / 兒童 ₩12,000" }
+            ]}
+        ];
+
+        // --- 2. 翻譯與其他資料 ---
+        var phrases = [
+            { cat: "🗣️ 萬用", list: [{ zh: "你好", kr: "안녕하세요", pro: "An-nyeong" }, { zh: "謝謝", kr: "감사합니다", pro: "Gam-sa" }, { zh: "不好意思", kr: "저기요", pro: "Jeo-gi-yo" }, { zh: "不會韓文", kr: "한국말 못해요", pro: "Han-guk-mal mo-tae-yo" }] },
+            { cat: "🍴 吃飯", list: [{ zh: "請給我菜單", kr: "메뉴판 주세요", pro: "Menu-pan" }, { zh: "我要這個", kr: "이거 주세요", pro: "I-geo" }, { zh: "請給我水", kr: "물 좀 주세요", pro: "Mul" }, { zh: "會辣嗎？", kr: "매워요?", pro: "Mae-wo-yo?" }, { zh: "結帳", kr: "계산해 주세요", pro: "Gye-san" }] },
+            { cat: "🛍️ 購物", list: [{ zh: "多少錢？", kr: "얼마예요?", pro: "Eol-ma" }, { zh: "可以退稅嗎？", kr: "텍스 리펀 돼요?", pro: "Tax Refund?" }, { zh: "有新的嗎？", kr: "새 상품 있어요?", pro: "Sae-sang-pum" }] },
+            { cat: "🚕 交通", list: [{ zh: "請載我去這裡", kr: "여기로 가주세요", pro: "Yeo-gi-ro" }, { zh: "請在這裡停", kr: "여기서 내려주세요", pro: "Yeo-gi-seo" }] },
+            { cat: "🚽 緊急", list: [{ zh: "廁所在哪？", kr: "화장실 어디예요?", pro: "Hwa-jang-sil" }, { zh: "廁所密碼？", kr: "비밀번호 뭐예요?", pro: "Bi-mil-beon-ho" }, { zh: "幫幫我", kr: "도와주세요", pro: "Do-wa-ju-se-yo" }] }
+        ];
+        
+        var curDay = 0, viewMode = 'trip';
+
+        // --- 3. 核心功能 ---
+        function render() {
+            var tabs = document.getElementById("tabs"), list = document.getElementById("list");
+            var budget = document.getElementById("budget-view"), lang = document.getElementById("lang-view"), sos = document.getElementById("sos-view");
+            tabs.innerHTML = "";
+
+            tripData.forEach((d, i) => {
+                var btn = document.createElement("button"); 
+                // 修正：正確抓取 Day 1, Day 2
+                btn.innerText = d.day.split('(')[0].trim(); 
+                btn.className = "tab-btn" + (viewMode === 'trip' && curDay === i ? " active" : "");
+                btn.onclick = () => { viewMode='trip'; curDay=i; render(); window.scrollTo(0,0); };
+                tabs.appendChild(btn);
+            });
+            
+            [
+                {id: 'budget', name: '💰 預算', class: 'budget-tab'},
+                {id: 'lang', name: '🗣️ 翻譯', class: 'lang-tab'},
+                {id: 'sos', name: '🆘 急救', class: 'sos-tab'}
+            ].forEach(t => {
+                var btn = document.createElement("button"); btn.innerText = t.name;
+                btn.className = "tab-btn " + t.class + (viewMode === t.id ? " active" : "");
+                btn.onclick = () => { viewMode = t.id; render(); window.scrollTo(0,0); };
+                tabs.appendChild(btn);
+            });
+
+            list.style.display = (viewMode === 'trip') ? 'block' : 'none';
+            budget.style.display = (viewMode === 'budget') ? 'block' : 'none';
+            lang.style.display = (viewMode === 'lang') ? 'block' : 'none';
+            sos.style.display = (viewMode === 'sos') ? 'block' : 'none';
+
+            if(viewMode === 'trip') renderDayView();
+            if(viewMode === 'budget') renderBudgetView();
+            if(viewMode === 'lang') renderLangView();
+            if(viewMode === 'sos') renderSosView();
+        }
+
+        function renderDayView() {
+            var div = document.getElementById("list"); div.innerHTML = "";
+            var day = tripData[curDay];
+            
+            var h = document.createElement("div"); 
+            h.innerHTML = `📅 <b>${day.date} ${day.day}</b>`; 
+            h.style.cssText = "margin-bottom:10px; color:#666; font-size:14px; padding-left:5px;";
+            div.appendChild(h);
+
+            day.events.forEach((e, idx) => {
+                if(e.connect) {
+                    div.innerHTML += `<div class="connector"><span>${e.connect}</span></div>`;
+                    return;
+                }
+                
+                var noteKey = `note_${curDay}_${idx}`;
+                var myNote = localStorage.getItem(noteKey) || "";
+                var timeWarn = e.open ? checkTimeStatus(e.open) : "";
+                var descHtml = (e.desc || e.price) ? 
+                    `<div id="dtl_${idx}" class="detail-area" style="display:none">
+                        ${e.desc ? `<div style="margin-bottom:5px">${e.desc}</div>` : ""}
+                        ${e.price ? `<div>🎫 ${e.price}</div>` : ""}
+                     </div>` : "";
+
+                var card = document.createElement("div");
+                card.className = "card" + (e.backup ? " backup" : "");
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="time-tag">${e.time}</span>
+                        <span class="card-icon">${e.icon}</span>
+                        <span class="card-title">${e.title}</span>
+                        <button class="note-btn ${myNote?'has-note':''}" onclick="toggleNote(${idx})">📝</button>
+                    </div>
+                    ${e.open ? `<div class="hours-style">🕒 ${e.open} ${timeWarn}</div>` : ""}
+                    ${e.trans ? `<div class="info-block trans-style">${e.trans}</div>` : ""}
+                    ${e.menu ? `<div class="info-block menu-style">🍽️ ${e.menu}</div>` : ""}
+                    ${e.note ? `<div class="note-style">💡 ${e.note}</div>` : ""}
+                    ${descHtml}
+                    <div id="note_area_${idx}" class="note-area" style="display:none">
+                        <textarea id="txt_${idx}" class="note-textarea" placeholder="輸入筆記...">${myNote}</textarea>
+                        <button class="save-btn" onclick="saveNote(${idx})">儲存</button>
+                        <div style="clear:both"></div>
+                    </div>
+                    <div id="note_show_${idx}" class="saved-note" style="display:${myNote?'block':'none'}">📌 ${myNote}</div>
+                    
+                    <div class="btn-row">
+                        ${e.kr ? `<button class="action-btn driver-btn" onclick="showKR('${e.kr}')"><span class="btn-icon-lg">🔍</span> 給司機</button>` : ""}
+                        
+                        ${e.map ? `<a href="nmap://search?query=${encodeURIComponent(e.map)}&appname=seoul_trip" target="_blank" class="action-btn map-btn"><span class="btn-icon-lg">📲</span> 啟動 Naver App</a>` : ""}
+                        
+                        ${e.video ? `<a href="https://www.youtube.com/watch?v=${e.video}" target="_blank" class="action-btn video-btn"><span class="btn-icon-lg">▶️</span> 影片</a>` : ""}
+                        
+                        ${(e.desc||e.price) ? `<button class="action-btn info-btn" onclick="toggleDetail(${idx})"><span class="btn-icon-lg">ℹ️</span> 詳情</button>` : ""}
+                    </div>
+                `;
+                div.appendChild(card);
+            });
+        }
+
+        function renderLangView() {
+            var html = "";
+            phrases.forEach(p => {
+                html += `<div class="section-title">${p.cat}</div><div class="phrase-grid">`;
+                p.list.forEach(item => {
+                    html += `<div class="phrase-card" onclick="speak('${item.kr}')">
+                        <div class="ph-zh">${item.zh}</div>
+                        <div class="ph-kr">${item.kr}</div>
+                        <div class="ph-pro">${item.pro}</div>
+                        <div style="text-align:right; margin-top:5px; color:#aaa; font-size:12px;">🔊 點擊發音</div>
+                    </div>`;
+                });
+                html += "</div>";
+            });
+            document.getElementById("lang-view").innerHTML = html;
+        }
+
+        function renderBudgetView() {
+            var categories = [
+                {id: 'food', name: '餐飲', icon: '🍔'},
+                {id: 'transport', name: '交通', icon: '🚕'},
+                {id: 'shopping', name: '購物', icon: '🛍️'},
+                {id: 'ticket', name: '門票', icon: '🎫'},
+                {id: 'other', name: '其他', icon: '📝'}
+            ];
+            
+            var ex = JSON.parse(localStorage.getItem('seoul_expenses')) || [];
+            var total = ex.reduce((a,b)=>a+b.amt, 0);
+            
+            var optionsHtml = categories.map(c => `<option value="${c.id}">${c.icon} ${c.name}</option>`).join('');
+            
+            var listHtml = ex.map((x, i) => {
+                var cat = categories.find(c=>c.id === (x.cat || 'other')) || categories[4];
+                return `<div class="expense-item">
+                    <div style="display:flex; align-items:center;">
+                        <span class="ex-cat-icon">${cat.icon}</span>
+                        <div><b>${x.desc}</b><br><small>${x.date}</small></div>
+                    </div>
+                    <div style="text-align:right">
+                        <div style="color:#be185d; font-weight:bold;">₩${x.amt.toLocaleString()}</div>
+                        <div onclick="delEx(${i})" style="color:#999; font-size:12px; margin-top:5px;">刪除</div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            document.getElementById("budget-view").innerHTML = `
+                <div class="budget-summary">
+                    <div class="total-label">總花費</div>
+                    <div class="total-amount">₩${total.toLocaleString()}</div>
+                </div>
+                <div class="budget-form">
+                    <div class="form-row">
+                        <select id="ex_cat" class="form-select">${optionsHtml}</select>
+                    </div>
+                    <div class="form-row">
+                        <input type="text" id="ex_desc" class="form-input input-desc" placeholder="項目 (如: 烤肉)">
+                        <input type="number" id="ex_amt" class="form-input input-amt" placeholder="金額">
+                    </div>
+                    <button class="add-expense-btn" onclick="addEx()">＋ 新增記帳</button>
+                </div>
+                <div class="expense-list">${listHtml}</div>
+            `;
+        }
+
+        function renderSosView() {
+            document.getElementById("sos-view").innerHTML = `
+                <div style="padding:20px;">
+                    <a href="tel:112" class="sos-btn sos-112">👮 報警 112</a>
+                    <a href="tel:119" class="sos-btn sos-119">🚑 救護 119</a>
+                    <a href="tel:+82-2-3480-5000" class="sos-btn sos-tw">🇹🇼 駐韓代表處</a>
+                </div>
+            `;
+        }
+
+        // --- Helpers ---
+        function checkTimeStatus(openTime) {
+            if(!openTime || openTime.indexOf('-') === -1) return "";
+            var now = new Date();
+            var parts = openTime.split('-');
+            var end = parts[1].trim();
+            var endH = parseInt(end.split(':')[0]), endM = parseInt(end.split(':')[1] || 0);
+            var closeTime = new Date(); closeTime.setHours(endH, endM, 0);
+            if (endH < 6 && now.getHours() > 12) closeTime.setDate(closeTime.getDate() + 1);
+            var diff = (closeTime - now) / 1000 / 60; // diff in minutes
+            if (diff < 0 && diff > -600) return '<span class="time-warning warn-closed">🔴 已打烊</span>';
+            if (diff > 0 && diff < 60) return '<span class="time-warning warn-soon">🟠 快關了</span>';
+            return "";
+        }
+
+        function toggleDetail(id) { var d=document.getElementById('dtl_'+id); d.style.display = (d.style.display==='none'?'block':'none'); }
+        function toggleNote(id) { var d=document.getElementById('note_area_'+id); d.style.display = (d.style.display==='none'?'block':'none'); }
+        function saveNote(id) {
+            var v = document.getElementById('txt_'+id).value;
+            localStorage.setItem(`note_${curDay}_${id}`, v);
+            renderDayView();
+        }
+        function showKR(txt) { 
+            document.getElementById('m-kr').innerText = txt; 
+            document.getElementById('modal').style.display='flex'; 
+        }
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+        function speak(txt) {
+            window.speechSynthesis.cancel();
+            var u = new SpeechSynthesisUtterance(txt);
+            u.lang = 'ko-KR';
+            window.speechSynthesis.speak(u);
+        }
+        function findRestroom() {
+            window.open("https://www.google.com/maps/search/?api=1&query=toilet", "_blank");
+        }
+        function openLocModal() {
+            document.getElementById('loc-modal').style.display = 'flex';
+        }
+        function closeLocModal() {
+            document.getElementById('loc-modal').style.display = 'none';
+        }
+        function sendMyLoc() {
+            if(!navigator.geolocation) return alert("不支援定位");
+            navigator.geolocation.getCurrentPosition(function(pos){
+                var link = "https://www.google.com/maps?q=" + pos.coords.latitude + "," + pos.coords.longitude;
+                if(navigator.share) {
+                    navigator.share({title: '我的位置', text: '我在這裡：', url: link});
+                } else {
+                    prompt("複製連結：", link);
+                }
+            }, function(){ alert("無法取得位置"); });
+        }
+        function addEx() {
+            var c = document.getElementById('ex_cat').value;
+            var d = document.getElementById('ex_desc').value;
+            var a = parseInt(document.getElementById('ex_amt').value);
+            if(!d || !a) return;
+            var ex = JSON.parse(localStorage.getItem('seoul_expenses')) || [];
+            ex.unshift({date: new Date().toLocaleDateString(), cat: c, desc: d, amt: a});
+            localStorage.setItem('seoul_expenses', JSON.stringify(ex));
+            renderBudgetView();
+        }
+        function delEx(i) {
+            if(!confirm("刪除?")) return;
+            var ex = JSON.parse(localStorage.getItem('seoul_expenses')) || [];
+            ex.splice(i, 1);
+            localStorage.setItem('seoul_expenses', JSON.stringify(ex));
+            renderBudgetView();
+        }
+        function fetchWeather() {
+            fetch('https://api.open-meteo.com/v1/forecast?latitude=37.56&longitude=126.97&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul')
+            .then(r=>r.json()).then(d=>{
+                document.getElementById('w-temp').innerText = Math.round(d.current_weather.temperature) + "°C";
+                // 移除穿著建議顯示
+            });
+        }
+
+        // Init
+        render();
+        fetchWeather();
+    </script>
+</body>
+</html>
