@@ -270,7 +270,7 @@
                 { connect: "⬇️ 步行 600m" },
                 { time: "20:45", icon: "🏨", title: "Roynet Hotel Check-in", note: "先放行李，稍作休息", open: "15:00 - 23:59", map: "로이넷호텔 서울 마포" },
                 { connect: "⬇️ 過馬路到對面巷子 (3分鐘)" },
-                { time: "21:20", icon: "🥩", title: "晚餐：元祖趙朴家", menu: "調味豬排骨、蘿蔔冷麵、甜米露", open: "11:30 - 22:00", map: "원조조박집", video: "hQTMdak-XfY",
+                { time: "21:20", icon: "🥩", title: "晚餐：元祖趙朴家", menu: "調味豬排骨、蘿蔔冷麵、甜米露", open: "11:30 - 22:00", map: "마포조박집", video: "hQTMdak-XfY",
                   desc: "麻浦區最知名的烤豬排骨老店，肉質軟嫩，附贈的甜米露是絕配。", price: "預算: ₩18,000/人", duration: "1.5 小時" },
                 { connect: "⬇️ 步行回飯店 (5分鐘)" },
                 { time: "22:45", icon: "🏨", title: "回飯店休息", note: "養精蓄銳，明天早起！" }
@@ -562,9 +562,6 @@
             u.lang = 'ko-KR';
             window.speechSynthesis.speak(u);
         }
-        function findRestroom() {
-            window.open("https://m.map.naver.com/search2/search.naver?query=%ED%99%94%EC%9E%A5%EC%8B%A4", "_blank");
-        }
         function openLocModal() {
             document.getElementById('loc-modal').style.display = 'flex';
         }
@@ -603,7 +600,6 @@
             fetch('https://api.open-meteo.com/v1/forecast?latitude=37.56&longitude=126.97&current_weather=true&daily=temperature_2m_max,temperature_2m_min&timezone=Asia%2FSeoul')
             .then(r=>r.json()).then(d=>{
                 document.getElementById('w-temp').innerText = Math.round(d.current_weather.temperature) + "°C";
-                // 移除穿著建議顯示
             });
         }
 
